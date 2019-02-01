@@ -102,7 +102,7 @@
                   rel="nofollow noopener">формат</a></small>
     </p>
     <p>
-        Сгенерировать чёртову прорву из
+        Сгенерировать
         <input class="void__main_smallinput" id="quantity" type="text" maxlength="2" placeholder="13" value="13">
         <button class="prorva" id="gen_innfl_prorva" type="button"
                 onclick="document.getElementById('prorva').value = genProrva('innfl')"
@@ -125,8 +125,8 @@
                 style="min-width: 0em; color: black;">СНИЛС
         </button>
         <br>
-        <textarea id="prorva" type="text" cols="15" rows="13" placeholder="чёртова прорва"
-                  style="min-height: 16em"></textarea>
+        <textarea id="prorva" type="text" cols="15" rows="13" 
+                  style="margin-top: 0.5em;min-height: 16em;min-width: 21.15em;"></textarea>
     </p>
 </div>
 <!--########## GENERATOR UKRAINE ###########################################-->
@@ -170,14 +170,13 @@
             ИИН Казахстана
         </button>
         <input id="iin_kz" type="text" maxlength="12" placeholder="ИИН (Казахстан)"> <span id="who_kaz"></span>
-        <br>Ограничение генератора: Если ГГ (первые две цифры номера) ==
-        (01..18) - то считаем за 21 век. ЕСЛИ ГГ == (00 || 19..99) - то 20-й век. На 19-й век не стал заморачиваться.
+        <br>
+		<small>Ограничение генератора: Если ГГ (первые две цифры номера) ==
+        (01..18) - то считаем за 21 век. ЕСЛИ ГГ == (00 || 19..99) - то 20-й век. 19-й век отсутствует.</small>
     </p>
     <a href="https://ru.wikipedia.org/wiki/Индивидуальный_идентификационный_номер" target="_blank"
        rel="nofollow noopener">Индивидуальный идентификационный
-        номер</a> (каз. Жеке сәйкестендіру номері) -- цифровой код, присваивающийся физическому лицу один раз и
-    пожизненно. В Казахстане с 1 января 2013 года заменил РНН и СИК. Находится на лицевой стороне Удостоверения личности
-    гражданина Казахстана.
+        номер</a>
 </div>
 <!--########## SKRIPTZ ### -->
 <script type="text/javascript">
