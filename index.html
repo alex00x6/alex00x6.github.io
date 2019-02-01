@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- честно свиснуто с сайта http://mellarius.ru -->
+    <style>
+        .header {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 0.5em;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, segoe ui, roboto, oxygen, ubuntu, cantarell, fira sans, droid sans, helvetica neue, sans-serif;
+            background-color: #f1f1f1;
+        }
+
+        .country-label {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .country-block {
+            box-shadow: 0 6px 8px rgba(102, 119, 136, .03), 0 1px 2px rgba(102, 119, 136, .3);
+            background: #fff;
+            padding: 0.5em;
+            margin-bottom: 0.5em;
+        }
+
+        button {
+            min-width: 15em;
+            text-align: left;
+            font-size: 0.9em;
+        }
+
+        a:link, a:visited {
+            color: #002bb8;
+            text-decoration: none;
+        }
+
+        *:not(pre):not(code) {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+</head>
+<body>
+<div class="header">Генератор ИНН, ОГРН, ОГРНИП, КПП, СНИЛС, ИИН, УНП</div>
+
+<!--########## GENERATOR RUSSIA ############################################-->
+<span class="void__anchor" id="random-russia"></span>
+<div class="country-block">
+    <div class="country-label">Россия</div>
+    <p>
+        <button type="button" id="button_genall" onclick="GenerateAll()">Сгенерировать всё сразу</button>
+        <br>
+        <button id="gen_innfl" type="button" onclick="document.getElementById('innfl').value = innfl()">Сгенерировать
+            ИНН ФЛ/ИП
+        </button>
+        <input id="innfl" type="text" maxlength="12" placeholder="ИНН ФЛ/ИП">
+        <small><a
+                href="http://www.consultant.ru/cons/cgi/online.cgi?req=doc&amp;base=LAW&amp;n=134082&amp;dst=1000000001"
+                target="_blank" rel="nofollow noopener">формат</a></small>
+        Проверить валидность ИНН: <input id="validateInn" type="text" maxlength="12"
+                                         onkeyup="this.style.backgroundColor = is_valid_inn(this.value) ? '#dfd' : '#fdd'">
+        <br>
+        <button id="gen_innul" type="button" onclick="document.getElementById('innul').value = innul()">Сгенерировать
+            ИНН ЮЛ
+        </button>
+        <input id="innul" type="text" maxlength="12" placeholder="ИНН ЮЛ">
+        <small><a
+                href="http://www.consultant.ru/cons/cgi/online.cgi?req=doc&amp;base=LAW&amp;n=134082&amp;dst=1000000001"
+                target="_blank" rel="nofollow noopener">формат</a></small>
+        <br>
+        <button id="gen_ogrn" type="button" onclick="document.getElementById('ogrn').value = ogrn()">Сгенерировать
+            ОГРН
+        </button>
+        <input id="ogrn" type="text" maxlength="13" placeholder="ОГРН">
+        <small><a
+                href="http://www.consultant.ru/cons/cgi/online.cgi?req=doc&amp;base=LAW&amp;n=311536&amp;dst=1000000001"
+                target="_blank" rel="nofollow noopener">формат</a></small>
+        <br>
+        <button id="gen_ogrnip" type="button" onclick="document.getElementById('ogrnip').value = ogrnip()">Сгенерировать
+            ОГРНИП
+        </button>
+        <input id="ogrnip" type="text" maxlength="15" placeholder="ОГРНИП">
+        <small><a
+                href="http://www.consultant.ru/cons/cgi/online.cgi?req=doc&amp;base=LAW&amp;n=311536&amp;dst=1000000001"
+                target="_blank" rel="nofollow noopener">формат</a></small>
+        <br>
+        <button id="gen_kpp" type="button" onclick="document.getElementById('kpp').value = kpp()">Сгенерировать КПП
+        </button>
+        <input id="kpp" type="text" maxlength="9" placeholder="КПП">
+        <small><a
+                href="http://www.consultant.ru/cons/cgi/online.cgi?req=doc&amp;base=LAW&amp;n=134082&amp;dst=1000000001"
+                target="_blank" rel="nofollow noopener">формат</a></small>
+        <br>
+        <button id="gen_snils" type="button" onclick="document.getElementById('snils').value = snils()">Сгенерировать
+            СНИЛС
+        </button>
+        <input id="snils" type="text" maxlength="11" placeholder="СНИЛС">
+        <small><a href="https://ru.wikipedia.org/wiki/Страховой_номер_индивидуального_лицевого_счёта" target="_blank"
+                  rel="nofollow noopener">формат</a></small>
+    </p>
+    <p>
+        Сгенерировать чёртову прорву из
+        <input class="void__main_smallinput" id="quantity" type="text" maxlength="2" placeholder="13" value="13">
+        <button class="prorva" id="gen_innfl_prorva" type="button"
+                onclick="document.getElementById('prorva').value = genProrva('innfl')"
+                style="min-width: 0em; color: black;">ИНН ФЛ/ИП
+        </button>
+        <button class="prorva" id="gen_innul_prorva" type="button"
+                onclick="document.getElementById('prorva').value = genProrva('innul')"
+                style="min-width: 0em; color: black;">ИНН ЮЛ
+        </button>
+        <button class="prorva" id="gen_ogrn_prorva" type="button"
+                onclick="document.getElementById('prorva').value = genProrva('ogrn')"
+                style="min-width: 0em; color: rgb(0, 153, 0);">ОГРН
+        </button>
+        <button class="prorva" id="gen_kpp_prorva" type="button"
+                onclick="document.getElementById('prorva').value = genProrva('kpp')"
+                style="min-width: 0em; color: black;">КПП
+        </button>
+        <button class="prorva" id="gen_snils_prorva" type="button"
+                onclick="document.getElementById('prorva').value = genProrva('snils')"
+                style="min-width: 0em; color: black;">СНИЛС
+        </button>
+        <br>
+        <textarea id="prorva" type="text" cols="15" rows="13" placeholder="чёртова прорва"
+                  style="min-height: 16em"></textarea>
+    </p>
+</div>
+<!--########## GENERATOR UKRAINE ###########################################-->
+<span class="void__anchor" id="random_ukraine"></span>
+<div class="country-block">
+    <div class="country-label">Украина</div>
+    <p>
+        <button id="gen_iin_ua" type="button" onclick="document.getElementById('iin_ua').value = iin_ua()">Сгенерировать
+            ИИН Украины
+        </button>
+        <input id="iin_ua" type="text" maxlength="10" placeholder="ИИН (Украина)"> <span id="who_ua"></span>
+    </p>
+    <a href="https://uk.wikipedia.org/wiki/Ідентифікаційний_номер_фізичної_особи" target="_blank"
+       rel="nofollow noopener">Ідентифікаційний номер фізичної особи</a>
+</div>
+<!--########## GENERATOR BELARUS ###########################################-->
+<span class="void__anchor" id="random_belarus"></span>
+<div class="country-block">
+    <div class="country-label">Беларусь</div>
+    <p>
+        <button id="gen_unp_ul" type="button" onclick="document.getElementById('unp_ul').value = unp_ul()">Сгенерировать
+            УНП ЮЛ
+        </button>
+        <input id="unp_ul" type="text" maxlength="10" placeholder="УНП ЮЛ (Беларусь)"> <span id="who_unp_ul"></span>
+    </p>
+    <p>
+        <button id="gen_unp_fl" type="button" onclick="document.getElementById('unp_fl').value = unp_fl()">Сгенерировать
+            УНП ФЛ/ИП
+        </button>
+        <input id="unp_fl" type="text" maxlength="10" placeholder="УНП ФЛ/ИП (Беларусь)"> <span id="who_unp_fl"></span>
+    </p>
+    <a href="http://pravo.levonevsky.org/bazaby09/sbor37/text37892/index3.htm" target="_blank" rel="nofollow noopener">Порядок
+        формирования УНП</a>
+</div>
+<!--########## GENERATOR KAZAKHSTAN ########################################-->
+<span class="void__anchor" id="random_kazakhstan"></span>
+<div class="country-block">
+    <div class="country-label">Казахстан</div>
+    <p>
+        <button id="gen_iin_kz" type="button" onclick="document.getElementById('iin_kz').value = iin_kz()">Сгенерировать
+            ИИН Казахстана
+        </button>
+        <input id="iin_kz" type="text" maxlength="12" placeholder="ИИН (Казахстан)"> <span id="who_kaz"></span>
+        <br>Ограничение генератора: Если ГГ (первые две цифры номера) ==
+        (01..18) - то считаем за 21 век. ЕСЛИ ГГ == (00 || 19..99) - то 20-й век. На 19-й век не стал заморачиваться.
+    </p>
+    <a href="https://ru.wikipedia.org/wiki/Индивидуальный_идентификационный_номер" target="_blank"
+       rel="nofollow noopener">Индивидуальный идентификационный
+        номер</a> (каз. Жеке сәйкестендіру номері) -- цифровой код, присваивающийся физическому лицу один раз и
+    пожизненно. В Казахстане с 1 января 2013 года заменил РНН и СИК. Находится на лицевой стороне Удостоверения личности
+    гражданина Казахстана.
+</div>
+<!--########## SKRIPTZ ### -->
+<script type="text/javascript">
+    /* generate all the things and fill corresponding fields*/
+    function GenerateAll() {
+        document.getElementById('innfl').value = innfl();
+        document.getElementById('innul').value = innul();
+        document.getElementById('ogrn').value = ogrn();
+        document.getElementById('ogrnip').value = ogrnip();
+        document.getElementById('kpp').value = kpp();
+        document.getElementById('snils').value = snils();
+    }
+
+    /* add zeros to string */
+    function zeros(str, lng) {
+        var factlength = str.length;
+        if (factlength < lng) {
+            for (var i = 0; i < (lng - factlength); i++) {
+                str = '0' + str;
+            }
+        }
+        return str;
+    }
+
+    /* GENERATE SOME PRORVA OF SOME (RUSSIA) */
+    function genProrva(str) {
+        rezult = '';
+        var f_name = str;
+        quant = document.getElementById('quantity').value;
+        if (!quant || quant.match(/^[\D]+$/) || quant < 1 || quant > 99) quant = 13;
+        for (let i = 0; i < quant; i++) {
+            rezult = rezult + window[f_name]() + '\n';
+        }
+        els = document.getElementsByClassName('prorva');
+        for (let i = 0; i < els.length; i++) {
+            els[i].style.color = 'black';
+        }
+        document.getElementById('gen_' + f_name + '_prorva').style.color = '#009900';
+        return rezult;
+    }
+
+    /* INN FL (RUSSIA) */
+    function innfl() {
+        /* NNNN (4 знака): для российских организаций и физических лиц - код налогового органа, который присвоил ИНН; */
+        var region = zeros(String(Math.floor((Math.random() * 92) + 1)), 2);
+        var inspection = zeros(String(Math.floor((Math.random() * 99) + 1)), 2);
+
+        /* XXXXX (XXXXXX): для российской организации (физического лица) - порядковый номер записи о лице в территориальном разделе Единого государственного реестра налогоплательщиков (далее - ЕГРН) налогового органа, который присвоил ИНН, - 5 знаков - для организации (6 знаков - для физического лица); */
+        var numba = zeros(String(Math.floor((Math.random() * 999999) + 1)), 6);
+
+        var rezult = region + inspection + numba;
+
+        /* C (CC) - контрольное число (1 знак - для организации, 2 знака - для физического лица), рассчитанное по специальному алгоритму, установленному Федеральной налоговой службой.*/
+        var kontr = String(((
+            7 * rezult[0] + 2 * rezult[1] + 4 * rezult[2] +
+            10 * rezult[3] + 3 * rezult[4] + 5 * rezult[5] +
+            9 * rezult[6] + 4 * rezult[7] + 6 * rezult[8] +
+            8 * rezult[9]
+        ) % 11) % 10);
+        kontr == 10 ? kontr = 0 : kontr = kontr;
+        rezult = rezult + kontr;
+        kontr = String(((
+            3 * rezult[0] + 7 * rezult[1] + 2 * rezult[2] +
+            4 * rezult[3] + 10 * rezult[4] + 3 * rezult[5] +
+            5 * rezult[6] + 9 * rezult[7] + 4 * rezult[8] +
+            6 * rezult[9] + 8 * rezult[10]
+        ) % 11) % 10);
+        kontr == 10 ? kontr = 0 : kontr = kontr;
+        rezult = rezult + kontr;
+
+        return rezult;
+    }
+
+    /* INN UL (RUSSIA) */
+    function innul() {
+        /* NNNN (4 знака): для российских организаций и физических лиц - код налогового органа, который присвоил ИНН; */
+        var region = zeros(String(Math.floor((Math.random() * 92) + 1)), 2);
+        var inspection = zeros(String(Math.floor((Math.random() * 99) + 1)), 2);
+
+        /* XXXXX (XXXXXX): для российской организации (физического лица) - порядковый номер записи о лице в территориальном разделе Единого государственного реестра налогоплательщиков (далее - ЕГРН) налогового органа, который присвоил ИНН, - 5 знаков - для организации (6 знаков - для физического лица); */
+        var numba = zeros(String(Math.floor((Math.random() * 99999) + 1)), 5);
+
+        var rezult = region + inspection + numba;
+
+        /* C (CC) - контрольное число (1 знак - для организации, 2 знака - для физического лица), рассчитанное по специальному алгоритму, установленному Федеральной налоговой службой.*/
+        var kontr = String(((
+            2 * rezult[0] + 4 * rezult[1] + 10 * rezult[2] +
+            3 * rezult[3] + 5 * rezult[4] + 9 * rezult[5] +
+            4 * rezult[6] + 6 * rezult[7] + 8 * rezult[8]
+        ) % 11) % 10);
+        kontr == 10 ? kontr = 0 : kontr = kontr;
+        rezult = rezult + kontr;
+
+        return rezult;
+    }
+
+    /* OGRN (RUSSIA) */
+    function ogrn() {
+        /* С (1-й знак) — признак отнесения государственного регистрационного номера записи: к основному государственному регистрационному номеру (ОГРН)* — 1, 5 (присваивается юридическому лицу)*/
+        var priznak = String(Math.floor((Math.random() * 2) + 1));
+        priznak == 2 ? priznak = 5 : null;
+        /* ГГ (со 2-го по 3-й знак) — две последние цифры года внесения записи в государственный реестр */
+        var godreg = zeros(String(Math.floor((Math.random() * 18) + 1)), 2);
+        /* КК (4-й, 5-й знаки) — порядковый номер субъекта Российской Федерации по перечню субъектов Российской Федерации, установленному статьей 65 Конституции Российской Федерации */
+        var region = zeros(String(Math.floor((Math.random() * 89) + 1)), 2);
+        /* ХХХХХXX (с 6-го по 12-й знак) — номер записи, внесенной в номер записи, внесенной соответственно в ЕГРЮЛ в течение года */
+        var zapis = zeros(String(Math.floor((Math.random() * 9999999) + 1)), 7);
+
+        var rezult = priznak + godreg + region + zapis;
+
+        /* Ч (13-й знак) — контрольное число: младший разряд остатка от деления предыдущего 12-значного числа на 11, если остаток от деления равен 10, то контрольное число равно 0 (нулю). */
+        var kontr = String(((rezult) % 11) % 10);
+        kontr == 10 ? kontr = 0 : kontr = kontr;
+
+        rezult = rezult + kontr;
+        return rezult;
+    }
+
+    /* OGRNIP (RUSSIA) */
+    function ogrnip() {
+        /* С (1-й знак) - признак отнесения государственного регистрационного номера записи: к основному государственному регистрационному номеру записи о государственной регистрации индивидуального предпринимателя (ОГРНИП) - 3; */
+        var priznak = 3;
+        /* Г и Г (2-й и 3-й знаки) - две последние цифры года внесения записи в государственный реестр; */
+        var godreg = zeros(String(Math.floor((Math.random() * 18) + 1)), 2);
+        /* К и К (4-й и 5-й знаки) - кодовое обозначение субъекта Российской Федерации, установленное МНС России в соответствии с федеративным устройством Российской Федерации, определенным статьей 65 Конституции Российской Федерации; */
+        var region = zeros(String(Math.floor((Math.random() * 89) + 1)), 2);
+        /* Х - Х (6-й - 14-й знаки) - номер записи, внесенной в номер записи, внесенной соответственно в ЕГРИП в течение года */
+        var zapis = zeros(String(Math.floor((Math.random() * 999999999) + 1)), 9);
+
+        var rezult = priznak + godreg + region + zapis;
+
+        /* Ч (15-й знак) - контрольное число: младший разряд остатка от деления предыдущего 14-значного числа на 13. */
+        var kontr = String(((rezult) % 13) % 10);
+        kontr == 10 ? kontr = 0 : kontr = kontr;
+
+        rezult = rezult + kontr;
+        return rezult;
+    }
+
+    /* KPP (RUSSIA) */
+    function kpp() {
+        /* NNNN (4 знака) - код налогового органа, который осуществил постановку на учет организации по месту ее нахождения, месту нахождения обособленного подразделения организации, расположенного на территории Российской Федерации, месту нахождения принадлежащих ей недвижимого имущества и транспортных средств, а также по иным основаниям, предусмотренным Налоговым кодексом Российской Федерации... */
+        var region = zeros(String(Math.floor((Math.random() * 92) + 1)), 2);
+        var inspection = zeros(String(Math.floor((Math.random() * 99) + 1)), 2);
+        /* PP (2 знака) - причина постановки на учет (учета сведений). Символ P представляет собой цифру или заглавную букву латинского алфавита от A до Z.
+            Числовое значение символов PP может принимать значение:
+                - для российской организации от 01 до 50 (01 - по месту ее нахождения);
+                - для иностранной организации от 51 до 99;
+        */
+        var prichina = Math.floor((Math.random() * 4) + 1);
+        switch (prichina) {
+            case 1:
+                prichina = '01';
+                break
+            case 2:
+                prichina = '43';
+                break
+            case 3:
+                prichina = '44';
+                break
+            case 4:
+                prichina = '45';
+                break
+            default:
+                prichina = '01';
+                break
+        }
+        var numba = zeros(String(Math.floor((Math.random() * 999) + 1)), 3);
+        var rezult = region + inspection + prichina + numba;
+        return rezult;
+    }
+
+    /* SNILS (RUSSIA) */
+    function snils() {
+        var rand1 = zeros(String(Math.floor((Math.random() * 998) + 2)), 3);
+        var rand2 = zeros(String(Math.floor((Math.random() * 999) + 1)), 3);
+        var rand3 = zeros(String(Math.floor((Math.random() * 999) + 1)), 3);
+        var rezult = rand1 + rand2 + rand3;
+        var kontr = String(9 * rezult[0] + 8 * rezult[1] + 7 * rezult[2] +
+            6 * rezult[3] + 5 * rezult[4] + 4 * rezult[5] +
+            3 * rezult[6] + 2 * rezult[7] + 1 * rezult[8]);
+        if (kontr < 100) {
+            kontr = kontr;
+        }
+        else if (kontr > 101) {
+            kontr = String(kontr % 101);
+            kontr = zeros(kontr, 2);
+            if (kontr > 99) {
+                kontr = '00';
+            }
+        }
+        else {
+            kontr = '00';
+        }
+        rezult = rezult + kontr;
+        return rezult;
+    }
+
+    /* check validity of INN (RUSSIA) */
+    function is_valid_inn(i) {
+        if (i.match(/\D/)) return false;
+        var inn = i.match(/(\d)/g);
+        if (inn.length == 10) {
+            return inn[9] == String(((
+                2 * inn[0] + 4 * inn[1] + 10 * inn[2] +
+                3 * inn[3] + 5 * inn[4] + 9 * inn[5] +
+                4 * inn[6] + 6 * inn[7] + 8 * inn[8]
+            ) % 11) % 10);
+        }
+        else if (inn.length == 12) {
+            return inn[10] == String(((
+                7 * inn[0] + 2 * inn[1] + 4 * inn[2] +
+                10 * inn[3] + 3 * inn[4] + 5 * inn[5] +
+                9 * inn[6] + 4 * inn[7] + 6 * inn[8] +
+                8 * inn[9]
+            ) % 11) % 10) && inn[11] == String(((
+                3 * inn[0] + 7 * inn[1] + 2 * inn[2] +
+                4 * inn[3] + 10 * inn[4] + 3 * inn[5] +
+                5 * inn[6] + 9 * inn[7] + 4 * inn[8] +
+                6 * inn[9] + 8 * inn[10]
+            ) % 11) % 10);
+        }
+        return false;
+    }
+
+    /* IIN (UKRAINE) */
+    function iin_ua() {
+        var birth = zeros(String(Math.floor((Math.random() * 16601)) + 20000), 5);
+        /* 20000..36600 */
+        var poryadk = zeros(String(Math.floor((Math.random() * 9000))), 4);
+        var rezult = birth + poryadk;
+        var kontr = String(((
+            (-1) * rezult[0] + 5 * rezult[1] + 7 * rezult[2] +
+            9 * rezult[3] + 4 * rezult[4] + 6 * rezult[5] +
+            10 * rezult[6] + 5 * rezult[7] + 7 * rezult[8]
+        ) % 11) % 10);
+        rezult = rezult + kontr;
+        var who = '';
+        (Math.floor(rezult[8]) % 2) > 0 ? who = who + 'Мужчина' : who = who + 'Женщина';
+        document.getElementById('who_ua').innerText = who;
+        return rezult;
+    }
+
+    /* UNP UL (BELARUS) */
+    function unp_ul() {
+        var who = '';
+        var organ = zeros(String(Math.floor((Math.random() * 6) + 1)), 1);
+        /* 1..7 */
+        var poryadk = zeros(String(Math.floor((Math.random() * 8999999))), 7);
+        /* 0000000..8999999*/
+        var rezult = organ + poryadk;
+        var kontr = String(((
+            29 * rezult[0] + 23 * rezult[1] + 19 * rezult[2] +
+            17 * rezult[3] + 13 * rezult[4] + 7 * rezult[5] +
+            5 * rezult[6] + 3 * rezult[7]
+        ) % 11));
+        rezult = rezult + kontr;
+
+        switch (rezult[0]) {
+            case '1':
+                who = who + 'город Минск';
+                break
+            case '2':
+                who = who + 'Брестская область';
+                break
+            case '3':
+                who = who + 'Витебская область';
+                break
+            case '4':
+                who = who + 'Гомельская область';
+                break
+            case '5':
+                who = who + 'Гродненская область';
+                break
+            case '6':
+                who = who + 'Минская область';
+                break
+            case '7':
+                who = who + 'Могилевская область';
+                break
+            default:
+                who = who + 'город Минск';
+                break
+        }
+        ;
+
+        if (kontr == '10') {
+            rezult = unp_ul();
+        }
+        else {
+            document.getElementById('who_unp_ul').innerText = who;
+        }
+
+        return rezult;
+    }
+
+    /* UNP FL (BELARUS) */
+    function unp_fl() {
+        var who = '';
+        var organ = zeros(String(Math.floor((Math.random() * 6) + 1)), 1);
+        /* 1..7 */
+        var poryadk = zeros(String(Math.floor((Math.random() * 8999998) + 1)), 7);
+        /* 0000000..8999999*/
+        var rezult = organ + poryadk;
+
+        var koef = 10;
+        switch (organ) {
+            case '1':
+                koef = 10;
+                break
+            case '2':
+                koef = 11;
+                break
+            case '3':
+                koef = 12;
+                break
+            case '4':
+                koef = 14;
+                break
+            case '5':
+                koef = 17;
+                break
+            case '6':
+                koef = 20;
+                break
+            case '7':
+                koef = 22;
+                break
+            default:
+                koef = 10;
+                break
+        }
+        ;
+
+        var kontr = String(((
+            koef * rezult[0] + 23 * rezult[1] + 19 * rezult[2] +
+            17 * rezult[3] + 13 * rezult[4] + 7 * rezult[5] +
+            5 * rezult[6] + 3 * rezult[7]
+        ) % 11));
+
+        switch (rezult[0]) {
+            case '1':
+                who = who + 'город Минск';
+                break
+            case '2':
+                who = who + 'Брестская область';
+                break
+            case '3':
+                who = who + 'Витебская область';
+                break
+            case '4':
+                who = who + 'Гомельская область';
+                break
+            case '5':
+                who = who + 'Гродненская область';
+                break
+            case '6':
+                who = who + 'Минская область';
+                break
+            case '7':
+                who = who + 'Могилевская область';
+                break
+            default:
+                who = who + 'город Минск';
+                break
+        }
+        ;
+
+        if (kontr == '10') {
+            rezult = unp_fl();
+        }
+        else {
+            document.getElementById('who_unp_fl').innerText = who;
+
+            switch (organ) {
+                case '1':
+                    organ = 'A';
+                    break
+                case '2':
+                    organ = 'B';
+                    break
+                case '3':
+                    organ = 'C';
+                    break
+                case '4':
+                    organ = 'E';
+                    break
+                case '5':
+                    organ = 'H';
+                    break
+                case '6':
+                    organ = 'K';
+                    break
+                case '7':
+                    organ = 'M';
+                    break
+                default:
+                    organ = 'A';
+                    break
+            }
+            ;
+
+            rezult = organ;
+
+            switch (poryadk[0]) {
+                case '0':
+                    rezult = rezult + 'A';
+                    break
+                case '1':
+                    rezult = rezult + 'B';
+                    break
+                case '2':
+                    rezult = rezult + 'C';
+                    break
+                case '3':
+                    rezult = rezult + 'E';
+                    break
+                case '4':
+                    rezult = rezult + 'H';
+                    break
+                case '5':
+                    rezult = rezult + 'K';
+                    break
+                case '6':
+                    rezult = rezult + 'M';
+                    break
+                case '7':
+                    rezult = rezult + 'O';
+                    break
+                case '8':
+                    rezult = rezult + 'P';
+                    break
+                case '9':
+                    rezult = rezult + 'T';
+                    break
+                default:
+                    rezult = rezult + 'A';
+                    break
+            }
+            ;
+
+            rezult = rezult + poryadk[1] + poryadk[2] + poryadk[3] + poryadk[4] + poryadk[5] + poryadk[6] + kontr;
+        }
+        return rezult;
+    }
+
+    /* IIN (KAZAKHSTAN) */
+    function iin_kz() {
+        var kontr = '10';
+        while (kontr == '10') {
+            var sex = String(Math.floor((Math.random() * 2)));
+            /* 0 -> male, 1 -> female */
+            var birth_yy = zeros(String(Math.floor((Math.random() * 100))), 2);
+            /* 00..99 */
+            var birth_mm = zeros(String(Math.floor((Math.random() * 12) + 1)), 2);
+            /* 01..12 */
+            var birth_dd = zeros(String(Math.floor((Math.random() * 28) + 1)), 2);
+            /* 01..28 */
+            var century = 20;
+            if (Math.floor(birth_yy) <= 18 && Math.floor(birth_yy) > 0) {
+                century = 21;
+            } else {
+                century = 20;
+            }
+            var seventh = 3 + Math.floor(sex);
+            if (century == 21) {
+                seventh = seventh + 2
+            }
+            ;seventh = String(seventh);
+            var justice = zeros(String(Math.floor((Math.random() * 9999) + 1)), 4);
+            rezult = birth_yy + birth_mm + birth_dd + seventh + justice;
+            kontr = String((1 * rezult[0] + 2 * rezult[1] + 3 * rezult[2] + 4 * rezult[3] + 5 * rezult[4] + 6 * rezult[5] + 7 * rezult[6] + 8 * rezult[7] + 9 * rezult[8] + 10 * rezult[9] + 11 * rezult[10]) % 11);
+            if (kontr == '10') {
+                kontr = String((3 * rezult[0] + 4 * rezult[1] + 5 * rezult[2] + 6 * rezult[3] + 7 * rezult[4] + 8 * rezult[5] + 9 * rezult[6] + 10 * rezult[7] + 11 * rezult[8] + 1 * rezult[9] + 2 * rezult[10]) % 11);
+            }
+        }
+        rezult = rezult + kontr;
+        var who = '';
+        Math.floor(sex) > 0 ? who = who + 'Женщина' : who = who + 'Мужчина'
+        Math.floor(birth_yy) <= 18 && Math.floor(birth_yy) > 0 ? who = who + ' рождения в 21 веке' + '(' + birth_dd + '.' + birth_mm + '.' + birth_yy + ')' : who = who + ' рождения в 20 веке' + '(' + birth_dd + '.' + birth_mm + '.' + birth_yy + ')';
+        document.getElementById('who_kaz').innerText = who;
+        return rezult;
+    }
+</script>
+
+<div class="footer">
+</div>
+<!-- SCRIPTS.  -->
+<script type="text/javascript">
+    /* ********************************************************************
+    hide/show "Table of Contents" buttons functionality
+    */
+    if (sessionStorage.getItem('hidetoc')) {
+        hidetocvar = sessionStorage.getItem('hidetoc');
+        if (hidetocvar == 'yes') {
+            hidetoc()
+        }
+        else if (hidetocvar == 'no') {
+            showtoc()
+        }
+    }
+
+    function hidetoc() {
+        if (document.getElementsByClassName('void__toc')[0]) {
+            document.getElementsByClassName('void__toc')[0].style.display = 'None';
+            document.getElementsByClassName('void__main')[0].style.marginLeft = '10%';
+            document.getElementById('buttonShowToc').style.display = 'block';
+            sessionStorage.setItem('hidetoc', 'yes');
+        }
+    }
+
+    function showtoc() {
+        if (document.getElementsByClassName('void__toc')[0]) {
+            document.getElementsByClassName('void__toc')[0].style.display = 'block';
+            document.getElementsByClassName('void__main')[0].style.marginLeft = '23%';
+            document.getElementById('buttonShowToc').style.display = 'None';
+            sessionStorage.setItem('hidetoc', 'no');
+        }
+    }
+
+    /* ********************************************************************
+    Open image at separate tab.
+    Sample call:
+    <span class="gallery gallery_noborder" onclick="OpenImageAtSeparateTab(this)"><img src="/mellarius/serfcity/castle.png" alt="Castle"></span>
+    */
+    function OpenImageAtSeparateTab(zis) {
+        window.open(zis.src, '_blank')
+    }
+
+    /* ********************************************************************
+    sorting for tables
+    grand thanks to https://inter-net.pro/javascript/sort-table
+    */
+    document.addEventListener('DOMContentLoaded', () => {
+        const getSort = ({target}) => {
+            const order = (target.dataset.order = -(target.dataset.order || -1));
+            const index = [...target.parentNode.cells].indexOf(target);
+            const collator = new Intl.Collator(['en', 'ru'], {numeric: true});
+            const comparator = (index, order) => (a, b) => order * collator.compare(
+                a.children[index].innerHTML,
+                b.children[index].innerHTML
+            );
+
+            for (const tBody of target.closest('table').tBodies)
+                tBody.append(...[...tBody.rows].sort(comparator(index, order)));
+
+            for (const cell of target.parentNode.cells)
+                cell.classList.toggle('sorted', cell === target);
+        };
+        document.querySelectorAll('.void__table_sort thead').forEach(tableTH => tableTH.addEventListener('click', () => getSort(event)));
+    });
+</script>
+</body>
+</html>
